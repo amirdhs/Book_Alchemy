@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book - Digital Library</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="page-header">
+        <div class="container">
+            <h1 class="library-title">My Digital Library</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="mb-4">Add New Book</h2>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="form-container">
+            {% if authors %}
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Book Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="isbn" class="form-label">ISBN</label>
+                        <input type="text" class="form-control" id="isbn" name="isbn" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="publication_year" class="form-label">Publication Year</label>
+                        <input type="number" class="form-control" id="publication_year" name="publication_year"
+                               placeholder="Optional">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="author_id" class="form-label">Author</label>
+                        <select class="form-select" id="author_id" name="author_id" required>
+                            <option value="" selected disabled>Select an author</option>
+                            {% for author in authors %}
+                                <option value="{{ author.id }}">{{ author.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="d-flex action-buttons">
+                        <button type="submit" class="btn btn-primary me-2">Add Book</button>
+                        <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">Back to Library</a>
+                    </div>
+                </form>
+            {% else %}
+                <div class="alert alert-warning">
+                    <h4>No authors available</h4>
+                    <p>You need to add at least one author before adding books.</p>
+                    <a href="{{ url_for('add_author') }}" class="btn btn-primary mt-2">Add an Author</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
